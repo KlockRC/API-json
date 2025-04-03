@@ -3,7 +3,6 @@ import models.Produto
 import models.Review
 import models.Cliente
 import models.Item
-import models.Local
 import models.Pagamento
 import models.Pedido
 import models.Vendedor
