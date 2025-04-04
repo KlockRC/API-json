@@ -1,20 +1,34 @@
 package api
-import api.csvreader
-import models.Produto
+
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import org.apache.kafka.common.serialization.StringSerializer
+import java.util.Properties
 import io.circe.syntax._
 import scala.util.Random
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import models.Produto
+
 
 object Kafkaproducer {
-    def produtos(Produto: List[Produto] ): Future[Unit] = Future {
-    for (i <- Produto) {
-        var tempo = Random.between(1000, 3500)
-        var teste = i.asJson.noSpaces
-        println("teste: " + teste)
-        Thread.sleep(tempo)
+   
+    
+    def produtos(produto: List[Produto]): Unit = {
+        val props = new Properties()
+        props.put("bootstrap.servers", "localhost:9092")
+        props.put("key.serializer", classOf[StringSerializer].getName)
+        props.put("value.serializer", classOf[StringSerializer].getName)
+        val producer = new KafkaProducer[String, String](props)
+
+        for (i <- produto) {
+            val tempo = Random.between(500, 2500)
+            val jsonString = i.asJson.noSpaces
+            val record = new ProducerRecord[String, String]("Produto-topico", jsonString)
+            producer.send(record)
+            println(s"🔹 Mensagem enviada para o Kafka: $jsonString")
+            Thread.sleep(tempo)
         }
-     }
+    }
 }
 
-
+object teste {
+    
+}

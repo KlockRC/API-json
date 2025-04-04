@@ -12,7 +12,7 @@ import scala.io.StdIn
 import api.Routes
 import api.Kafkaproducer
 
-object HttpServerRoutingMinimal {
+object main {
 
 def main(args: Array[String]): Unit = {
     implicit val system = ActorSystem(Behaviors.empty, "my-system")
