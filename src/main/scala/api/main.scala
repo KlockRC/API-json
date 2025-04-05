@@ -10,12 +10,12 @@ import scala.concurrent.ExecutionContextExecutor
 import io.circe.syntax._
 import scala.io.StdIn
 import api.Routes
-import api.Kafkaproducer
+import api.KafkaProducerApp
 
 object main {
 
 def main(args: Array[String]): Unit = {
-    implicit val system = ActorSystem(Behaviors.empty, "my-system")
+    implicit val system: ActorSystem[Any] = ActorSystem(Behaviors.empty, "my-system")
     
     implicit val executionContext = system.executionContext
 
@@ -32,7 +32,7 @@ def main(args: Array[String]): Unit = {
       s"http://localhost:8080/pedidos\n" +
       s"http://localhost:8080/vendedores\n" +
       s"Press RETURN to stop...")
-      Kafkaproducer.produtos(csvreader.lerProdutos("data/produtos.csv"))
+    KafkaProducerApp.produtos(csvreader.lerProdutos("data/produtos.csv"))
     StdIn.readLine() // let it run until user presses return
     bindingFuture
       .flatMap(_.unbind()) // trigger unbinding from the port
