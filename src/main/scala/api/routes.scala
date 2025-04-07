@@ -2,14 +2,7 @@ package api
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
 import io.circe.syntax._
-import io.circe.generic.auto._ 
-import api.csvreader
-import scala.io.Source
-import scala.util.{Try, Using}
-import scala.collection.StringView
 
 object Routes {
     def getRoutes: Route = concat( 
@@ -51,7 +44,7 @@ object Routes {
         },
         path ("vendedores") {
             get {
-                var vendedores = csvreader.lerVendedores ("data/vendedores.csv")
+                val vendedores = csvreader.lerVendedores ("data/vendedores.csv")
                 complete(vendedores.asJson.noSpaces)
             }
         }

@@ -6,7 +6,7 @@ import io.circe.syntax.*
 import org.apache.kafka.common.serialization.{Serializer, Deserializer, Serde, Serdes}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Future, Await}
+import scala.concurrent.Future
 import java.util.Properties
 import scala.util.Random
 import models.{Produto, Cliente, Item, Pagamento, Pedido, Review, Vendedor}
@@ -38,8 +38,8 @@ object serializer {
 }
 
 object KafkaProducerApp {
-    val temporizador = Random.between(50, 100)
-    val producer = connect.producer
+    private val temporizador = Random.between(5, 10)
+    private val producer = connect.producer
     implicit val produtoSerde: Serde[Produto] = serializer.serializador[Produto]
     implicit val clienteSerde: Serde[Cliente] = serializer.serializador[Cliente]
     implicit val itemSerde: Serde[Item] = serializer.serializador[Item]
@@ -76,8 +76,8 @@ object KafkaProducerApp {
     }
     def itemKafka (items: List[Item]): Future[Unit] = Future {
         for (item <- items) {
-            var itemSerializer = itemSerde.serializer().serialize("Topico-Item", item)
-            var record = new ProducerRecord[String, Array[Byte]]("Topico-Item", "key3", itemSerializer)
+            val itemSerializer = itemSerde.serializer().serialize("Topico-Item", item)
+            val record = new ProducerRecord[String, Array[Byte]]("Topico-Item", "key3", itemSerializer)
             try {
                 producer.send(record)
             }catch {
@@ -114,8 +114,8 @@ object KafkaProducerApp {
     }
     def reviewKafka (reviews: List[Review]): Future[Unit] = Future{
         for (review <- reviews) {
-            var serializerReview = reviewSerde.serializer().serialize("Topico-Review", review)
-            var record = new ProducerRecord[String, Array[Byte]]("Topico-Review", "Key6", serializerReview)
+            val serializerReview = reviewSerde.serializer().serialize("Topico-Review", review)
+            val record = new ProducerRecord[String, Array[Byte]]("Topico-Review", "Key6", serializerReview)
             try {
                 producer.send(record)
             }catch
@@ -127,7 +127,7 @@ object KafkaProducerApp {
     def vendedorKafka (vendedores: List[Vendedor]): Future[Unit] = Future {
         for (vendedor <- vendedores) {
             val serializerVendedor = vendedorSerde.serializer().serialize("Topico-Vendedor", vendedor)
-            var record = new ProducerRecord[String, Array[Byte]]("Topico-Vendedor", "Key7", serializerVendedor)
+            val record = new ProducerRecord[String, Array[Byte]]("Topico-Vendedor", "Key7", serializerVendedor)
             try {
                 producer.send(record)
             }catch
