@@ -27,16 +27,20 @@ def main(args: Array[String]): Unit = {
       s"http://localhost:8080/reviews\n" +
       s"http://localhost:8080/clientes\n" +
       s"http://localhost:8080/itens\n" +
-      s"http://localhost:8080/local\n" +
       s"http://localhost:8080/pagamentos\n" +
       s"http://localhost:8080/pedidos\n" +
       s"http://localhost:8080/vendedores\n" +
       s"Press RETURN to stop...")
     KafkaProducerApp.produtosKafka(csvreader.lerProdutos("data/produtos.csv"))
     KafkaProducerApp.clientesKafka(csvreader.lerClientes("data/clientes.csv"))
-    StdIn.readLine() // let it run until user presses return
+    KafkaProducerApp.itemKafka(csvreader.lerItens("data/itens.csv"))
+    KafkaProducerApp.pagamentoKafka(csvreader.lerPagamentos("data/pagamentos.csv"))
+    KafkaProducerApp.pedidoKafka(csvreader.lerPedidos("data/pedidos.csv"))
+    KafkaProducerApp.reviewKafka(csvreader.lerReviews("data/reviews.csv"))
+    KafkaProducerApp.vendedorKafka(csvreader.lerVendedores("data/vendedores.csv"))
+    StdIn.readLine()
     bindingFuture
-      .flatMap(_.unbind()) // trigger unbinding from the port
-      .onComplete(_ => system.terminate()) // and shutdown when done
+      .flatMap(_.unbind())
+      .onComplete(_ => system.terminate()) 
   }
 }
