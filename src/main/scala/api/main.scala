@@ -32,7 +32,8 @@ def main(args: Array[String]): Unit = {
       s"http://localhost:8080/pedidos\n" +
       s"http://localhost:8080/vendedores\n" +
       s"Press RETURN to stop...")
-    KafkaProducerApp.produtos(csvreader.lerProdutos("data/produtos.csv"))
+    KafkaProducerApp.produtosKafka(csvreader.lerProdutos("data/produtos.csv"))
+    KafkaProducerApp.clientesKafka(csvreader.lerClientes("data/clientes.csv"))
     StdIn.readLine() // let it run until user presses return
     bindingFuture
       .flatMap(_.unbind()) // trigger unbinding from the port
