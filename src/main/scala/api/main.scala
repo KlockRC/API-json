@@ -16,7 +16,7 @@ def main(args: Array[String]): Unit = {
 
     val bindingFuture = Http().newServerAt("localhost", 9090).bind(route)
 
-    println(s"Server now online. Please navigate to\nhttp://localhost:8080/produtos\n" +
+    println(s"Server now online. Please navigate to\nhttp://localhost:9090/produtos\n" +
       s"http://localhost:9090/reviews\n" +
       s"http://localhost:9090/clientes\n" +
       s"http://localhost:9090/itens\n" +

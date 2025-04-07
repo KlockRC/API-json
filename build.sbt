@@ -15,5 +15,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.11",
   "org.apache.kafka" % "kafka-clients" % KafkaVersion,
   "com.typesafe.akka" %% "akka-stream-kafka" % "7.0.1",
-  "com.typesafe.akka" %% "akka-pki" % AkkaVersion
+  "com.typesafe.akka" %% "akka-pki" % AkkaVersion,
+  "ch.qos.logback" % "logback-classic" % "1.5.18",
+  "org.slf4j" % "slf4j-api" % "2.0.17"
 )

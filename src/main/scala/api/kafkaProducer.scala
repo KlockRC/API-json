@@ -1,5 +1,6 @@
 package api
 
+import org.slf4j.LoggerFactory
 import io.circe.*
 import io.circe.parser.*
 import io.circe.syntax.*
@@ -10,6 +11,8 @@ import scala.concurrent.Future
 import java.util.Properties
 import scala.util.Random
 import models.{Produto, Cliente, Item, Pagamento, Pedido, Review, Vendedor}
+
+val logger = LoggerFactory.getLogger(getClass)
 
 object connect {
     private val props = new Properties()
@@ -54,35 +57,38 @@ object KafkaProducerApp {
             val record = new ProducerRecord[String, Array[Byte]]("Topico-Produto", "key1", serializedProduto)
             try {
                 producer.send(record).get()
+                logger.info("Mensagem enviada: {}", produto)
             } catch {
                 case e: Exception =>
-                    println(s"Erro ao enviar mensagem: ${e.getMessage}")
+                    logger.error(s"Erro ao enviar mensagem: ${e.getMessage}")
             }
             Thread.sleep(temporizador)
         }
     }
     def clientesKafka(clientes: List[Cliente]): Future[Unit] = Future{
         for (cliente <- clientes) {
-            val serializerCliente = clienteSerde.serializer().serialize("Topico-Cliente", cliente)
-            val record = new ProducerRecord[String, Array[Byte]]("Topico-Cliente", "key2", serializerCliente)
+            val serializedCliente = clienteSerde.serializer().serialize("Topico-Cliente", cliente)
+            val record = new ProducerRecord[String, Array[Byte]]("Topico-Cliente", "key2", serializedCliente)
             try {
-                producer.send(record)
+                producer.send(record).get()
+                logger.info("Mensagem enviada: {}", cliente)
             } catch {
                 case e: Exception =>
-                    println(s"Erro ao enviar mensagem: ${e.getMessage}")
+                    logger.error(s"Erro ao enviar mensagem: ${e.getMessage}")
             }
             Thread.sleep(temporizador)
         }
     }
     def itemKafka (items: List[Item]): Future[Unit] = Future {
         for (item <- items) {
-            val itemSerializer = itemSerde.serializer().serialize("Topico-Item", item)
-            val record = new ProducerRecord[String, Array[Byte]]("Topico-Item", "key3", itemSerializer)
+            val serializedItem = itemSerde.serializer().serialize("Topico-Item", item)
+            val record = new ProducerRecord[String, Array[Byte]]("Topico-Item", "key3", serializedItem)
             try {
-                producer.send(record)
+                producer.send(record).get()
+                logger.info("Mensagem enviada: {}", item)
             }catch {
                 case e: Exception =>
-                println(s"Erro ao enviar mensagem: ${e.getMessage}")
+                logger.error(s"Erro ao enviar mensagem: ${e.getMessage}")
 
             }
             Thread.sleep(temporizador)
@@ -90,49 +96,53 @@ object KafkaProducerApp {
     }
     def pagamentoKafka(pagamentos: List[Pagamento]): Future[Unit] = Future{
         for (pagamento <- pagamentos) {
-            val pagamentoSerializer = pagamentoSerde.serializer().serialize("Topico-Pagamento", pagamento)
-            val record = new ProducerRecord[String, Array[Byte]]("Topico-Pagamento", "Key4", pagamentoSerializer)
+            val serializedPagamento = pagamentoSerde.serializer().serialize("Topico-Pagamento", pagamento)
+            val record = new ProducerRecord[String, Array[Byte]]("Topico-Pagamento", "Key4", serializedPagamento)
             try {
-                producer.send(record)
+                producer.send(record).get()
+                logger.info("Mensagem enviada: {}", pagamento)
             }catch
                 case e: Exception =>
-                    println(s"Erro ao enviar mensagem: ${e.getMessage}")
+                    logger.error(s"Erro ao enviar mensagem: ${e.getMessage}")
             Thread.sleep(temporizador)        
         }
     }
     def pedidoKafka (pedidos: List[Pedido]): Future[Unit] = Future {
         for (pedido <- pedidos) {
-            val pedidoSerializer = pedidoSerde.serializer().serialize("Topico-Pedido", pedido)
-            val record = new ProducerRecord[String, Array[Byte]]("Topico-Pedido", "Key5", pedidoSerializer)
+            val serializedPedido = pedidoSerde.serializer().serialize("Topico-Pedido", pedido)
+            val record = new ProducerRecord[String, Array[Byte]]("Topico-Pedido", "Key5", serializedPedido)
             try {
-                producer.send(record)
+                producer.send(record).get()
+                logger.info("Mensagem enviada: {}", pedido)
             }catch
                 case e: Exception =>
-                    println(s"Erro ao enviar mensagem: ${e.getMessage}")
+                    logger.error(s"Erro ao enviar mensagem: ${e.getMessage}")
             Thread.sleep(temporizador)
         }
     }
     def reviewKafka (reviews: List[Review]): Future[Unit] = Future{
         for (review <- reviews) {
-            val serializerReview = reviewSerde.serializer().serialize("Topico-Review", review)
-            val record = new ProducerRecord[String, Array[Byte]]("Topico-Review", "Key6", serializerReview)
+            val serializedReview = reviewSerde.serializer().serialize("Topico-Review", review)
+            val record = new ProducerRecord[String, Array[Byte]]("Topico-Review", "Key6", serializedReview)
             try {
-                producer.send(record)
+                producer.send(record).get()
+                logger.info("Mensagem enviada: {}", review)
             }catch
                 case e: Exception =>
-                    println(s"Erro ao enviar mensagem: ${e.getMessage}")
+                    logger.error(s"Erro ao enviar mensagem: ${e.getMessage}")
             Thread.sleep(temporizador)
         }
     }
     def vendedorKafka (vendedores: List[Vendedor]): Future[Unit] = Future {
         for (vendedor <- vendedores) {
-            val serializerVendedor = vendedorSerde.serializer().serialize("Topico-Vendedor", vendedor)
-            val record = new ProducerRecord[String, Array[Byte]]("Topico-Vendedor", "Key7", serializerVendedor)
+            val serializedVendedor = vendedorSerde.serializer().serialize("Topico-Vendedor", vendedor)
+            val record = new ProducerRecord[String, Array[Byte]]("Topico-Vendedor", "Key7", serializedVendedor)
             try {
-                producer.send(record)
+                producer.send(record).get()
+                logger.info("Mensagem enviada: {}", vendedor)
             }catch
                 case e: Exception =>
-                    println(s"Erro ao enviar mensagem: ${e.getMessage}")
+                    logger.error(s"Erro ao enviar mensagem: ${e.getMessage}")
             Thread.sleep(temporizador)
         }
     }
