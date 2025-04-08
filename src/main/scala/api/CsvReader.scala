@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory
 
 val logger = LoggerFactory.getLogger(getClass)
 
-object csvreader {
+
+
+object CsvReader {
   def lerProdutos(caminho: String): List[Produto] = {
     Using(Source.fromFile(caminho)) { file =>
       val linhas = file.getLines().drop(1).toList
@@ -14,7 +16,7 @@ object csvreader {
       linhas.take(5).foreach(linha => logger.info(s"Linha: $linha"))
 
       linhas.flatMap { linha =>
-        val colunas = linha.split(",").map(_.trim)
+        val colunas = linha.split(",").map(_.trim.replace("\"", ""))
         Try(Produto(colunas(0), colunas(1), colunas(2), colunas(3), colunas(4), colunas(5), colunas(6), colunas(7), colunas(8))).toOption
       }
     }.getOrElse {
@@ -29,7 +31,7 @@ object csvreader {
       linhas.take(5).foreach(linha => logger.info(s"Linha: $linha"))
 
       linhas.flatMap { linha => 
-        val colunas = linha.split(",").map(_.trim)
+        val colunas = linha.split(",").map(_.trim.replace("\"", ""))
         Try(Review(colunas(0), colunas(1), colunas(2), colunas(3), colunas(4), colunas(5), colunas(6))).toOption
       }
     }.getOrElse {
@@ -44,7 +46,7 @@ object csvreader {
       linhas.take(5).foreach(linha => logger.info(s"Linha: $linha"))
 
       linhas.flatMap { linha =>
-        val colunas = linha.split(",").map(_.trim)
+        val colunas = linha.split(",").map(_.trim.replace("\"", ""))
         Try(Cliente(colunas(0), colunas(1), colunas(2), colunas(3), colunas(4))).toOption
         }
       }.getOrElse{
@@ -58,7 +60,7 @@ object csvreader {
        logger.info(s"Número de linhas lidas: ${linhas.size}")
        linhas.take(5).foreach(linha => logger.info(s"Linha: $linha"))
        linhas.flatMap { linha =>
-        val colunas = linha.split(",").map(_.trim)
+        val colunas = linha.split(",").map(_.trim.replace("\"", ""))
         Try(Item(colunas(0), colunas(1), colunas(2), colunas(3), colunas(4), colunas(5), colunas(6))).toOption
         } 
       }.getOrElse{
@@ -72,7 +74,7 @@ object csvreader {
         logger.info(s"Número de linhas lidas: ${linhas.size}")
         linhas.take(5).foreach(linha => logger.info(s"Linha: $linha"))
         linhas.flatMap { linha =>
-          val colunas = linha.split(",").map(_.trim)
+          val colunas = linha.split(",").map(_.trim.replace("\"", ""))
           Try(Pagamento(colunas(0), colunas(1), colunas(2), colunas(3), colunas(4))).toOption
           }  
       }.getOrElse{
@@ -86,7 +88,7 @@ object csvreader {
         logger.info(s"Número de linhas lidas: ${linhas.size}")
         linhas.take(5).foreach(linha => logger.info(s"Linha: $linha"))
         linhas.flatMap { linha =>
-          val colunas = linha.split(",").map(_.trim)
+          val colunas = linha.split(",").map(_.trim.replace("\"", ""))
           Try(Pedido(colunas(0), colunas(1), colunas(2), colunas(3), colunas(4), colunas(5), colunas(6), colunas(7))).toOption
         }
       }.getOrElse {
@@ -100,7 +102,7 @@ object csvreader {
         logger.info(s"Número de linhas lidas: ${linhas.size}")
         linhas.take(5).foreach(linha => logger.info(s"Linha: $linha"))
         linhas.flatMap { linha =>
-          val colunas = linha.split(",").map(_.trim)
+          val colunas = linha.split(",").map(_.trim.replace("\"", ""))
           Try(Vendedor(colunas(0), colunas(1), colunas(2), colunas(3))).toOption
         }
       }.getOrElse {
