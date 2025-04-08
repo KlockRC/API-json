@@ -1,6 +1,5 @@
 package api
 
-import org.slf4j.LoggerFactory
 import io.circe.*
 import io.circe.parser.*
 import io.circe.syntax.*
@@ -12,9 +11,10 @@ import java.util.Properties
 import scala.util.Random
 import models.{Produto, Cliente, Item, Pagamento, Pedido, Review, Vendedor}
 
-val logger = LoggerFactory.getLogger(getClass)
 
-object connect {
+
+
+object Connect {
     private val props = new Properties()
     props.put("bootstrap.servers", "172.22.90.83:9094")
     props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
@@ -22,7 +22,7 @@ object connect {
     val producer = new KafkaProducer[String, Array[Byte]](props)
 }
 
-object serializer {
+object Serializer {
     implicit def serializador[A >: Null](implicit encoder: Encoder[A], decoder: Decoder[A]): Serde[A] = {
 
         val serializer = new Serializer[A] {
@@ -42,14 +42,14 @@ object serializer {
 
 object KafkaProducerApp {
     private val temporizador = Random.between(5, 10)
-    private val producer = connect.producer
-    implicit val produtoSerde: Serde[Produto] = serializer.serializador[Produto]
-    implicit val clienteSerde: Serde[Cliente] = serializer.serializador[Cliente]
-    implicit val itemSerde: Serde[Item] = serializer.serializador[Item]
-    implicit val pagamentoSerde: Serde[Pagamento] = serializer.serializador[Pagamento]
-    implicit val pedidoSerde: Serde[Pedido] = serializer.serializador[Pedido]
-    implicit val reviewSerde: Serde[Review] = serializer.serializador[Review]
-    implicit val vendedorSerde: Serde[Vendedor] = serializer.serializador[Vendedor]
+    private val producer = Connect.producer
+    implicit val produtoSerde: Serde[Produto] = Serializer.serializador[Produto]
+    implicit val clienteSerde: Serde[Cliente] = Serializer.serializador[Cliente]
+    implicit val itemSerde: Serde[Item] = Serializer.serializador[Item]
+    implicit val pagamentoSerde: Serde[Pagamento] = Serializer.serializador[Pagamento]
+    implicit val pedidoSerde: Serde[Pedido] = Serializer.serializador[Pedido]
+    implicit val reviewSerde: Serde[Review] = Serializer.serializador[Review]
+    implicit val vendedorSerde: Serde[Vendedor] = Serializer.serializador[Vendedor]
     
     def produtosKafka(produtos: List[Produto]): Future[Unit] = Future {
         for (produto <- produtos) {

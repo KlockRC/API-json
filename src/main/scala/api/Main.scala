@@ -6,7 +6,7 @@ import akka.http.scaladsl.Http
 import scala.io.StdIn
 
 
-object main {
+object Main {
 
 def main(args: Array[String]): Unit = {
     implicit val system: ActorSystem[Any] = ActorSystem(Behaviors.empty, "my-system")
@@ -24,13 +24,13 @@ def main(args: Array[String]): Unit = {
       s"http://localhost:9090/pedidos\n" +
       s"http://localhost:9090/vendedores\n" +
       s"Press RETURN to stop...")
-    KafkaProducerApp.produtosKafka(csvreader.lerProdutos("data/produtos.csv"))
-    KafkaProducerApp.clientesKafka(csvreader.lerClientes("data/clientes.csv"))
-    KafkaProducerApp.itemKafka(csvreader.lerItens("data/itens.csv"))
-    KafkaProducerApp.pagamentoKafka(csvreader.lerPagamentos("data/pagamentos.csv"))
-    KafkaProducerApp.pedidoKafka(csvreader.lerPedidos("data/pedidos.csv"))
-    KafkaProducerApp.reviewKafka(csvreader.lerReviews("data/reviews.csv"))
-    KafkaProducerApp.vendedorKafka(csvreader.lerVendedores("data/vendedores.csv"))
+    KafkaProducerApp.produtosKafka(CsvReader.lerProdutos("data/produtos.csv"))
+    KafkaProducerApp.clientesKafka(CsvReader.lerClientes("data/clientes.csv"))
+    KafkaProducerApp.itemKafka(CsvReader.lerItens("data/itens.csv"))
+    KafkaProducerApp.pagamentoKafka(CsvReader.lerPagamentos("data/pagamentos.csv"))
+    KafkaProducerApp.pedidoKafka(CsvReader.lerPedidos("data/pedidos.csv"))
+    KafkaProducerApp.reviewKafka(CsvReader.lerReviews("data/reviews.csv"))
+    KafkaProducerApp.vendedorKafka(CsvReader.lerVendedores("data/vendedores.csv"))
     StdIn.readLine()
     bindingFuture
       .flatMap(_.unbind())
