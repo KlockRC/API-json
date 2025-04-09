@@ -34,6 +34,16 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: "local-cluster"
       KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: "broker:9092"
+  app:
+    image: klockrc/api-json-scala:1.0
+    depends_on:
+      - broker
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
+    ports:
+      - "9090:9090"
+    networks:
+      - kafka-net
 networks:
   kafka-net:
     driver: bridge

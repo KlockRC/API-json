@@ -5,6 +5,9 @@ import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
 import scala.io.StdIn
 
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Promise}
+
 
 object Main {
 def main(args: Array[String]): Unit = {
@@ -13,7 +16,7 @@ def main(args: Array[String]): Unit = {
     implicit val executionContext = system.executionContext
     val route = Routes.getRoutes
 
-    val bindingFuture = Http().newServerAt("localhost", 9090).bind(route)
+    val bindingFuture = Http().newServerAt("0.0.0.0", 9090).bind(route)
 
     println(s"Server now online. Please navigate to\nhttp://localhost:9090/produtos\n" +
       s"http://localhost:9090/reviews\n" +
@@ -30,9 +33,14 @@ def main(args: Array[String]): Unit = {
     KafkaProducerApp.pedidoKafka(CsvReader.lerPedidos("data/pedidos.csv"))
     KafkaProducerApp.reviewKafka(CsvReader.lerReviews("data/reviews.csv"))
     KafkaProducerApp.vendedorKafka(CsvReader.lerVendedores("data/vendedores.csv"))
-    StdIn.readLine()
+    var continue = true
+    while (continue) {
+        val input = StdIn.readLine().trim.toLowerCase
+        if (input == "exit") continue = false
+    }
+    println("Encerrando servidor...")
     bindingFuture
       .flatMap(_.unbind())
-      .onComplete(_ => system.terminate()) 
+      .onComplete(_ => system.terminate())
   }
 }
