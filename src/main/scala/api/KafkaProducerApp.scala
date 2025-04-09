@@ -1,22 +1,16 @@
 package api
 
-import io.circe.*
-import io.circe.parser.*
-import io.circe.syntax.*
-import org.apache.kafka.common.serialization.{Serializer, Deserializer, Serde, Serdes}
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import org.apache.kafka.common.serialization.Serde
+import org.apache.kafka.clients.producer.ProducerRecord
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import java.util.Properties
 import scala.util.Random
 import models.{Produto, Cliente, Item, Pagamento, Pedido, Review, Vendedor}
 import config.KafkaConfig.producerConf
 
-
-
-object KafkaProducer{
+object KafkaProducerApp{
     private val temporizador = Random.between(5, 10)
-    val producer = producerConf
+    private val producer = producerConf
     implicit val produtoSerde: Serde[Produto] = KafkaSerializer.serializador[Produto]
     implicit val clienteSerde: Serde[Cliente] = KafkaSerializer.serializador[Cliente]
     implicit val itemSerde: Serde[Item] = KafkaSerializer.serializador[Item]
@@ -39,8 +33,6 @@ object KafkaProducer{
             Thread.sleep(temporizador)
         }
     }
-}
-    /*
     def clientesKafka(clientes: List[Cliente]): Future[Unit] = Future{
         for (cliente <- clientes) {
             val serializedCliente = clienteSerde.serializer().serialize("Topico-Cliente", cliente)
@@ -123,5 +115,3 @@ object KafkaProducer{
         }
     }
 }
-
-     */

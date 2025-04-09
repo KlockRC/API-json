@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory
 
 val logger = LoggerFactory.getLogger(getClass)
 
-
-
 object CsvReader {
   def lerProdutos(caminho: String): List[Produto] = {
     Using(Source.fromFile(caminho)) { file =>

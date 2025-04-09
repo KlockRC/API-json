@@ -7,7 +7,6 @@ import scala.io.StdIn
 
 
 object Main {
-
 def main(args: Array[String]): Unit = {
     implicit val system: ActorSystem[Any] = ActorSystem(Behaviors.empty, "my-system")
     
