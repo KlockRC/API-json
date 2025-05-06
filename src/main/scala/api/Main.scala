@@ -35,7 +35,7 @@ def main(args: Array[String]): Unit = {
     KafkaProducerApp.vendedorKafka(CsvReader.lerVendedores("data/vendedores.csv"))
     var continue = true
     while (continue) {
-        val input = StdIn.readLine().trim.toLowerCase
+        val input =  Option(scala.io.StdIn.readLine()).map(_.trim).getOrElse("")
         if (input == "exit") continue = false
     }
     println("Encerrando servidor...")

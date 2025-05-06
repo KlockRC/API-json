@@ -1,5 +1,5 @@
 
-FROM sbtscala/scala-sbt:eclipse-temurin-23.0.2_7_1.10.11_3.3.5
+FROM sbtscala/scala-sbt:eclipse-temurin-alpine-23.0.2_7_1.10.11_3.3.5
 WORKDIR /API
 COPY build.sbt .
 RUN mkdir project && echo "" > project/build.properties
